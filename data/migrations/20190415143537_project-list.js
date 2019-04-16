@@ -4,6 +4,9 @@ exports.up = function(knex, Promise) {
     tbl.increments()
 
     tbl.string('project', 128).notNullable()
+    tbl.datetime('project_deadline').notNullable()
+    tbl.datetime('feedback_deadline').notNullable()
+    tbl.datetime('recommendation_deadline').notNullable()
   })
 };
 
