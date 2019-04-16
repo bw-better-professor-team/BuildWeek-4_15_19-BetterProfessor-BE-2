@@ -4,11 +4,11 @@ const db = require('../data/dbConfig.js')
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const secret = require('../server/secrets.js').jwtSecret
+const secret = require('../api/secrets.js').jwtSecret
 
-router.post('/register', (req, res) => {
+router.post('/', (req, res) => {
+
   let user = req.body
-
   const hash = bcrypt.hashSync(user.password, 10)
   user.password = hash
 
@@ -48,7 +48,7 @@ function generateToken(user) {
   const options = {
     expiresIn: '1d'
   }
-  
+
   return jwt.sign(payload, secret, options)
 }
 

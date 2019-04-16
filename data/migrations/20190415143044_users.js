@@ -5,7 +5,6 @@ exports.up = function(knex, Promise) {
 
     tbl.string('username', 128).notNullable()
     tbl.string('password', 128).notNullable()
-    tbl.integer('professor_id').notNullable()
   })
 };
 
