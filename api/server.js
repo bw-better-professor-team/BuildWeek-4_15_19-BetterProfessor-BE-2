@@ -7,7 +7,7 @@ const cors = require('cors')
 const db = require('../data/dbConfig.js')
 
 const registerRouter = require('../routes/register-router.js')
-
+const userRouter = require('../routes/user-router.js')
 
 server.use(helmet())
 server.use(express.json())
@@ -15,15 +15,8 @@ server.use(cors())
 
 
 server.use('/api/register', registerRouter)
+server.use('/api/users', userRouter)
 
 
-
-server.get('/users', (req, res) => {
-  db('users').then(response => {
-    res.status(200).json(response)
-  }).catch(err => {
-    res.status(500).json(err)
-  })
-})
 
 module.exports = server
