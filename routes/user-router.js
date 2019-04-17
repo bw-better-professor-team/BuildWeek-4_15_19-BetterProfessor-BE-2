@@ -50,17 +50,17 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-  const {id} = req.params
-
-  db.remove(id).then(user => {
-    if(user) {
-      res.status(200).json(user)
-    } else {
-      res.status(404).json({ message: 'User with the ID does not exist' })
-    }
-  }).catch(err => {
-    res.status(500).json({ message: 'Username could not be removed' })
-  })
+  db('users').where({id: req.params.id})
+    .del()
+    .then(user => {
+      if(user) {
+        res.status(204).json(user)
+      } else {
+        res.status(404).json({ message: 'User cannot be deleted' })
+      }
+    }).catch(err => {
+      res.status(500).json(err)
+    })
 })
 
 module.exports = router
