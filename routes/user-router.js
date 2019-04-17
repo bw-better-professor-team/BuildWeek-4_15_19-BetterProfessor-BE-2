@@ -11,17 +11,15 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-  const {id} = req.params
+  const id = req.params.id
 
-  db.getById(id).then(user => {
-    if(user) {
+  db('users').where({id})
+    .first()
+    .then(user => {
       res.status(200).json(user)
-    } else {
-      res.status(404).json({ message: 'User with the ID does not exist'})
-    }
-  }).catch(err => {
-    res.status(500).json({ message: 'User could not be retrieved' })
-  })
+    }).catch(err => {
+      res.status(500).json(err)
+    })
 })
 
 router.post('/', (req, res) => {
@@ -38,22 +36,17 @@ router.post('/', (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
-  const {id} = req.params
-  const users = req.body
-
-  if(users.username && users.password){
-    db.update(id, users).then(user => {
+  db('users').where({id: req.params.id})
+    .update(req.body)
+    .then(user => {
       if(user) {
         res.status(200).json(user)
       } else {
-        res.status(404).json({ message: 'User with the ID does not exist' })
+        res.status(404).json({ message: 'User not found' })
       }
     }).catch(err => {
-      res.status(500).json({ message: 'User information could not be retrieved' })
+      res.status(500).json(err)
     })
-  } else {
-    res.status(400).json({ message: 'Provide correct username and password' })
-  }
 })
 
 router.delete('/:id', (req, res) => {

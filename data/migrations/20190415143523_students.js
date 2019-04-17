@@ -4,6 +4,7 @@ exports.up = function(knex, Promise) {
     tbl.increments()
 
     tbl.string('student_name', 128).notNullable()
+    tbl.string('email', 128).notNullable()
   })
 };
 
