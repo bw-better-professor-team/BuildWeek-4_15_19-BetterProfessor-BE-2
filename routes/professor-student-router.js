@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 const secrets = require('../api/secrets.js');
 const db = require('../data/dbConfig.js');
 
-router.get('/:id', async (req, res) => {
-
-  const id = req.params.id;
+router.get('/', async (req, res) => {
+  console.log(req.decodedJwt)
+  const id = req.decodedJwt.subject;
 
   const info = await db('student-project')
     .innerJoin('users', 'users.id', '=', 'student-project.professor_id')
@@ -16,11 +16,11 @@ router.get('/:id', async (req, res) => {
 
   for (let i = 0; i < info.length; i++) {
     const { student_name, email } = await db('students').where({ 'id': `${info[i].student_id}` }).select('student_name', 'email').first();
-    info[i].student_name = student_name;
+    info[i].student_name = student_name
     info[i].email = email;
-    info[i].project = await db('projects').join('student-project', 'projects.id', '=', 'student-project.project_id')
+    info[i].project = await db('project-list').join('student-project', 'project-list.id', '=', 'student-project.project_id')
       .where({ 'student-project.student_id': `${info[i].student_id}` })
-      .select('project_id', 'project_name', 'project_deadline', 'feedback_deadline', 'recommendation_deadline')
+      .select('project_id', 'project', 'project_deadline', 'feedback_deadline', 'recommendation_deadline')
 
     for (let j = 0; j < info[i].project.length; j++) {
       try {
@@ -43,14 +43,12 @@ router.get('/:id', async (req, res) => {
           .where({ 'student-project.student_id': `${info[i].student_id}` })
           .select('message').first();
 
-        console.log(profmessage);
         if (profmessage.message) {
           info[i].project[j].professorMessage = profmessage.message;
         } else {
         }
       } catch (error) {
         info[i].project[j].professorMessage = '';
-        // console.error(error)
       }
     }
 
