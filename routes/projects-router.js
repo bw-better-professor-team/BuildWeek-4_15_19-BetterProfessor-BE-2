@@ -23,14 +23,14 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const {
-    projectName: project,
-    projectDeadline: project_deadline,
-    feedbackDeadline: feedback_deadline,
-    recommendationDeadline: recommendation_deadline
+    project,
+    project_deadline,
+    feedback_deadline,
+    recommendation_deadline
   } = req.body
 
   if(!project || !project_deadline || !feedback_deadline || !recommendation_deadline) {
-    res.status(400).json({ message: 'Fill in all of the fields' })
+    res.status(404).json({ message: 'Fill in all of the fields' })
   } else {
     db('project-list').insert({ project, project_deadline, feedback_deadline, recommendation_deadline })
       .then(project => {
@@ -43,10 +43,10 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   const {
-    projectName: project,
-    projectDeadline: project_deadline,
-    feedbackDeadline: feedback_deadline,
-    recommendationDeadline: recommendation_deadline
+    project,
+    project_deadline,
+    feedback_deadline,
+    recommendation_deadline
   } = req.body
 
   const id = req.params.id
