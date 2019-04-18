@@ -24,16 +24,17 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const students = req.body
-
-  if(students.student_name) {
-    db.insert(students).then(student => {
-      res.status(201).json(students)
-    }).catch(err => {
-      res.status(500).json({ message: 'Error saving students name' })
-    })
+  if(!students.student_name || !students.email) {
+    res.status(404).json({ message: 'Provide the correct students name and email' })
   } else {
-    res.status(404).json({ message: 'Provide the correct students name' })
+    db('students').insert(students)
+      .then(student => {
+        res.status(201).json(student)
+      }).catch(err => {
+        res.status(500).json({ message: 'Error saving students name and email' })
+      })
   }
+  
 })
 
 router.put('/:id', (req, res) => {
