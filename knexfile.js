@@ -20,7 +20,7 @@ module.exports = {
       }
     }
   },
-  testing: {
+  test: {
    client: 'sqlite3',
    connection: {
      filename: './data/test.db3',
@@ -32,5 +32,10 @@ module.exports = {
    seeds: {
      directory: './data/seeds',
    },
+   pools: {
+     afterCreate: (conn, done) => {
+       conn.run('PRAGMA foreign_keys = ON', done)
+     }
+   }
  }
 };

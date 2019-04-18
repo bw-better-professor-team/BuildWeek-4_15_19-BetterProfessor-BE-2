@@ -3,11 +3,14 @@ const server = require('../api/server.js')
 
 const db = require('../data/dbConfig.js')
 
-beforeEach(async () => {
-  await db('project-list')
-})
+beforeAll(() => {
+  return db.seed.run();
+});
 
 describe('projects-router.js', () => {
+  it('should run in a test environment', () => {
+    expect(process.env.NODE_ENV).toEqual('test');
+  });
   describe('GET /api/projects', () => {
     it('should respond with 200 OK', () => {
       return request(server)
@@ -74,7 +77,7 @@ describe('projects-router.js', () => {
   describe('DELETE /api/projects/:id', () => {
     it('should delete an id', () => {
       return request(server)
-      .delete('/api/projects/:id')
+      .delete('/api/projects/1')
       .then(res => {
         expect(res.status).toBe(204)
       })
