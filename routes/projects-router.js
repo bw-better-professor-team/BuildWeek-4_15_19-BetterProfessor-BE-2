@@ -4,6 +4,7 @@ const db = require('../data/dbConfig.js')
 
 router.get('/', (req, res) => {
   db('project-list').then(response => {
+    
     res.status(200).json(response)
   }).catch(err => {
     res.status(500).json(err)

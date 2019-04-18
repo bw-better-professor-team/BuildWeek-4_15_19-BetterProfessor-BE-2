@@ -21,7 +21,7 @@ server.use(cors())
 server.use('/api/register', registerRouter)
 //server.use('/api/users', userRouter)
 server.use('/api/students', restricted, studentsRouter)
-server.use('/api/projects', restricted, projectsRouter)
+server.use('/api/projects', projectsRouter)
 server.use('/api/professors-students', restricted, professorStudentRouter)
 
 module.exports = server
