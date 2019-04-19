@@ -3,11 +3,14 @@ const server = require('../api/server.js')
 
 const db = require('../data/dbConfig.js')
 
-beforeEach(async () => {
-  await db('project-list').truncate()
-})
+beforeAll(() => {
+  return db.seed.run();
+});
 
 describe('projects-router.js', () => {
+  it('should run in a test environment', () => {
+    expect(process.env.NODE_ENV).toEqual('test');
+  });
   describe('GET /api/projects', () => {
     it('should respond with 200 OK', () => {
       return request(server)
@@ -23,7 +26,6 @@ describe('projects-router.js', () => {
         expect(res.type).toBe('application/json')
       })
     })
-
   })
 
   describe('GET /api/projects/:id', () => {
@@ -61,8 +63,11 @@ describe('projects-router.js', () => {
   describe('PUT /api/projects/:id', () => {
     it('should update an id', () => {
       return request(server)
-      .put('/api/projects/:id')
-      .send({id: 1})
+      .put('/api/projects/1')
+      .send({"project": "Angular Project",
+        "project_deadline": "2019-09-09 23:59:59",
+        "feedback_deadline": "2019-09-09 23:59:59",
+        "recommendation_deadline": "2019-09-09 23:59:59"})
       .then(res => {
         expect(res.status).toBe(201)
       })
@@ -72,7 +77,7 @@ describe('projects-router.js', () => {
   describe('DELETE /api/projects/:id', () => {
     it('should delete an id', () => {
       return request(server)
-      .delete('/api/projects/:id')
+      .delete('/api/projects/1')
       .then(res => {
         expect(res.status).toBe(204)
       })

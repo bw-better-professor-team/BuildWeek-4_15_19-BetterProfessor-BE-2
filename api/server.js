@@ -5,6 +5,7 @@ const server = express()
 const helmet = require('helmet')
 const cors = require('cors')
 const db = require('../data/dbConfig.js')
+const restricted = require('./restricted.js');
 
 const registerRouter = require('../routes/register-router.js')
 //const userRouter = require('../routes/user-router.js')
@@ -21,6 +22,6 @@ server.use('/api/register', registerRouter)
 //server.use('/api/users', userRouter)
 server.use('/api/students', studentsRouter)
 server.use('/api/projects', projectsRouter)
-server.use('/api/professors-students', professorStudentRouter)
+server.use('/api/professors-students', restricted, professorStudentRouter)
 
 module.exports = server
