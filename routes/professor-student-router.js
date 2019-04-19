@@ -5,7 +5,7 @@ const secrets = require('../api/secrets.js');
 const db = require('../data/dbConfig.js');
 
 router.get('/', async (req, res) => {
-  console.log(req.decodedJwt)
+
   const id = req.decodedJwt.subject;
 
   const info = await db('student-project')
@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 
   for (let i = 0; i < info.length; i++) {
     const { student_name, email } = await db('students').where({ 'id': `${info[i].student_id}` }).select('student_name', 'email').first();
-    info[i].student_name = student_name
+    info[i].student_name = student_name;
     info[i].email = email;
     info[i].project = await db('project-list').join('student-project', 'project-list.id', '=', 'student-project.project_id')
       .where({ 'student-project.student_id': `${info[i].student_id}` })
@@ -53,7 +53,6 @@ router.get('/', async (req, res) => {
     }
 
   }
-
 
   res.status(200).json(info);
 });
